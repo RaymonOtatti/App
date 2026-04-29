@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Chef IA" />
+  <title>Chef IA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--cream:#FAF7F2;--warm:#FFFDF9;--ink:#1C1917;--soft:#44403C;--muted:#78716C;--hint:#A8A29E;--border:rgba(28,25,23,0.12);--border2:rgba(28,25,23,0.22);--accent:#C2410C;--green:#15803D;--green-bg:#F0FDF4;--amber:#B45309;--amber-bg:#FFFBEB;--r:16px;--rs:10px}
+    html{background:var(--cream)}
+    body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;padding-bottom:48px}
+    .hero{background:var(--ink);padding:56px 20px 36px;text-align:center;position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 65% 0%,rgba(194,65,12,.4) 0%,transparent 60%),radial-gradient(ellipse at 10% 100%,rgba(194,65,12,.15) 0%,transparent 55%)}
+    .hi{position:relative;z-index:1}
+    .hi .ico{font-size:44px;margin-bottom:10px}
+    .hi h1{font-family:'Lora',serif;font-size:26px;font-weight:600;color:#fff;line-height:1.25;margin-bottom:8px}
+    .hi p{font-size:14px;color:rgba(255,255,255,.55);font-weight:300}
+    .main{max-width:520px;margin:0 auto;padding:0 16px}
+    .box{background:var(--warm);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-top:20px}
+    .lbl{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--hint);margin-bottom:12px}
+    .irow{display:flex;gap:8px;margin-bottom:14px}
+    .irow input{flex:1;border:1px solid var(--border2);border-radius:var(--rs);padding:12px 14px;font-size:15px;font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);outline:none;-webkit-appearance:none}
+    .irow input:focus{border-color:var(--accent)}
+    .irow input::placeholder{color:var(--hint)}
+    .badd{background:var(--accent);color:#fff;border:none;border-radius:var(--rs);padding:12px 20px;font-size:20px;cursor:pointer}
+    .slbl{font-size:12px;color:var(--hint);margin-bottom:8px}
+    .suggs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+    .sug{font-size:12px;background:none;border:1px solid var(--border2);border-radius:999px;padding:5px 12px;cursor:pointer;color:var(--soft);font-family:'DM Sans',sans-serif}
+    .sug:active{background:#FFF0EB;border-color:var(--accent);color:var(--accent)}
+    .chips{display:flex;flex-wrap:wrap;gap:6px;min-height:28px}
+    .chip{display:flex;align-items:center;gap:6px;background:var(--ink);color:#fff;border-radius:999px;padding:6px 12px;font-size:13px}
+    .xbtn{background:none;border:none;cursor:pointer;color:rgba(255,255,255,.55);font-size:17px;line-height:1;padding:0}
+    .empty{font-size:13px;color:var(--hint);padding:4px 0}
+    .bsearch{width:100%;background:var(--accent);color:#fff;border:none;border-radius:var(--rs);padding:16px;font-size:16px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:16px}
+    .bsearch:disabled{opacity:.38;cursor:not-allowed}
+    .bsearch:not(:disabled):active{opacity:.85}
+    .loading{text-align:center;padding:40px 20px;display:none}
+    .lico{font-size:40px;animation:bounce .9s ease-in-out infinite;margin-bottom:12px}
+    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+    .loading p{font-size:14px;color:var(--muted)}
+    .errbox{background:#FFF5F5;border:1px solid #FCA5A5;border-radius:var(--rs);padding:14px 16px;font-size:13px;color:#B91C1C;margin-top:16px;display:none;line-height:1.5}
+    .rhead{font-family:'Lora',serif;font-size:18px;color:var(--ink);margin:28px 0 14px;display:none}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .card{background:var(--warm);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;animation:fup .4s ease both}
+    .card:nth-child(1){animation-delay:0s}.card:nth-child(2){animation-delay:.06s}.card:nth-child(3){animation-delay:.12s}.card:nth-child(4){animation-delay:.18s}.card:nth-child(5){animation-delay:.24s}.card:nth-child(6){animation-delay:.3s}
+    @keyframes fup{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    .card:active{opacity:.75}
+    .thumb{width:100%;aspect-ratio:4/3;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:46px;border-bottom:1px solid var(--border)}
+    .cbody{padding:12px}
+    .ctitle{font-family:'Lora',serif;font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;line-height:1.3}
+    .cmeta{font-size:11px;color:var(--hint);margin-bottom:7px}
+    .cstat{font-size:11px;font-weight:500;padding:3px 9px;border-radius:999px;display:inline-block}
+    .ok{background:var(--green-bg);color:var(--green)}
+    .miss{background:var(--amber-bg);color:var(--amber)}
+    .ov{position:fixed;inset:0;background:rgba(28,25,23,.55);z-index:100;display:flex;align-items:flex-end;justify-content:center;opacity:0;transition:opacity .25s;pointer-events:none}
+    .ov.open{opacity:1;pointer-events:all}
+    .modal{background:var(--warm);border-radius:24px 24px 0 0;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);-webkit-overflow-scrolling:touch}
+    .ov.open .modal{transform:translateY(0)}
+    .drag{width:40px;height:4px;background:var(--border2);border-radius:2px;margin:14px auto 0}
+    .mthumb{width:100%;aspect-ratio:16/9;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:72px;margin-top:14px}
+    .mc{padding:20px 20px 44px}
+    .mtitle{font-family:'Lora',serif;font-size:22px;font-weight:600;margin-bottom:8px}
+    .mdesc{font-size:14px;color:var(--soft);line-height:1.65;margin-bottom:16px}
+    .badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+    .badge{font-size:12px;padding:5px 12px;border-radius:999px;background:var(--cream);border:1px solid var(--border);color:var(--soft)}
+    .malert{background:var(--amber-bg);border:1px solid rgba(180,83,9,.2);border-radius:var(--rs);padding:12px 14px;font-size:13px;color:var(--amber);margin-bottom:16px}
+    .msec{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--hint);margin-bottom:12px;margin-top:20px}
+    .steps{list-style:none}
+    .steps li{display:flex;gap:12px;font-size:14px;color:var(--soft);line-height:1.55;padding-bottom:14px;border-bottom:1px solid var(--border);margin-bottom:14px}
+    .steps li:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+    .snum{width:24px;height:24px;min-width:24px;background:var(--ink);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;margin-top:1px}
+  </style>
+</head>
+<body>
+<div class="hero"><div class="hi"><div class="ico">👨‍🍳</div><h1>¿Qué hay en tu cocina?</h1><p>Ingresá tus ingredientes y te sugiero recetas al instante</p></div></div>
+<div class="main">
+  <div class="box">
+    <div class="lbl">Tus ingredientes</div>
+    <div class="irow"><input type="text" id="ii" placeholder="Ej: huevos, tomate, queso..." /><button class="badd" onclick="add()">+</button></div>
+    <div class="slbl">Sugerencias rápidas</div>
+    <div class="suggs" id="suggs"></div>
+    <div class="chips" id="chips"></div>
+  </div>
+  <button class="bsearch" id="sbtn" onclick="find()" disabled>Buscar recetas ✦</button>
+  <div class="errbox" id="err"></div>
+  <div class="loading" id="load"><div class="lico">🍳</div><p>El chef IA está cocinando ideas...</p></div>
+  <div class="rhead" id="rhead"></div>
+  <div class="grid" id="grid"></div>
+</div>
+<div class="ov" id="ov" onclick="ovClick(event)"><div class="modal" id="modal"><div class="drag"></div><div id="mi"></div></div></div>
+<script>
+const KEY='AIzaSyCrO_oZPH_nM5iRv2qdXx1xwv-tcTQnZUY';
+const URL=`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${KEY}`;
+const SUGS=['huevos','tomate','cebolla','ajo','queso','pollo','arroz','pasta','papa','zanahoria','pimiento','espinaca','leche','manteca','harina','limón','atún','lentejas','champiñones','aceite de oliva'];
+let ings=[],recs=[];
+function rsugs(){document.getElementById('suggs').innerHTML=SUGS.filter(s=>!ings.includes(s)).slice(0,10).map(s=>`<button class="sug" onclick="qadd('${s}')">${s}</button>`).join('')}
+function qadd(s){if(!ings.includes(s)){ings.push(s);upd()}}
+function add(){const el=document.getElementById('ii');const v=el.value.trim().toLowerCase();if(!v)return;v.split(/[,;]+/).map(s=>s.trim()).filter(s=>s&&!ings.includes(s)).forEach(s=>ings.push(s));el.value='';upd()}
+document.getElementById('ii').addEventListener('keydown',e=>{if(e.key==='Enter')add()});
+function rem(i){ings.splice(i,1);upd()}
+function upd(){const c=document.getElementById('chips');c.innerHTML=ings.length?ings.map((g,i)=>`<div class="chip">${g}<button class="xbtn" onclick="rem(${i})">×</button></div>`).join(''):'<span class="empty">Aún no agregaste ingredientes...</span>';document.getElementById('sbtn').disabled=!ings.length;rsugs()}
+async function find(){if(!ings.length)return;const e=document.getElementById('err');e.style.display='none';document.getElementById('load').style.display='block';document.getElementById('rhead').style.display='none';document.getElementById('grid').innerHTML='';document.getElementById('sbtn').disabled=true;
+const p=`Tengo estos ingredientes: ${ings.join(', ')}. Sugiere exactamente 6 recetas. Responde SOLO con JSON array sin markdown: [{"nombre":"Nombre","emoji":"🍳","descripcion":"Descripcion","tiempo":"20 min","dificultad":"Facil","ingredientes_necesarios":["ing1"],"ingredientes_faltantes":[],"pasos":["Paso 1","Paso 2","Paso 3"]}]`;
+try{const r=await fetch(URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:p}]}]})});const d=await r.json();if(d.error)throw new Error(d.error.message);const t=d.candidates[0].content.parts[0].text;recs=JSON.parse(t.replace(/```json|```/g,'').trim());render();}catch(ex){e.textContent='Error: '+(ex.message||'Intentá de nuevo.');e.style.display='block';}
+document.getElementById('load').style.display='none';document.getElementById('sbtn').disabled=false;}
+function render(){const h=document.getElementById('rhead');h.textContent=`${recs.length} recetas encontradas`;h.style.display='block';document.getElementById('grid').innerHTML=recs.map((r,i)=>{const m=r.ingredientes_faltantes?.length||0;return`<div class="card" onclick="openM(${i})"><div class="thumb">${r.emoji}</div><div class="cbody"><div class="ctitle">${r.nombre}</div><div class="cmeta">${r.tiempo} · ${r.dificultad}</div><span class="cstat ${m?'miss':'ok'}">${m?`Faltan ${m}`:'¡Listo! ✓'}</span></div></div>`}).join('')}
+function openM(i){const r=recs[i];const m=r.ingredientes_faltantes?.length||0;document.getElementById('mi').innerHTML=`<div class="mthumb">${r.emoji}</div><div class="mc"><div class="mtitle">${r.nombre}</div><div class="mdesc">${r.descripcion}</div><div class="badges"><span class="badge">⏱ ${r.tiempo}</span><span class="badge">${r.dificultad}</span><span class="badge">${(r.ingredientes_necesarios||[]).length} ingredientes</span></div>${m?`<div class="malert">⚠️ Te faltan: ${r.ingredientes_faltantes.join(', ')}</div>`:''}<div class="msec">Preparación paso a paso</div><ol class="steps">${(r.pasos||[]).map((p,j)=>`<li><span class="snum">${j+1}</span><span>${p}</span></li>`).join('')}</ol></div>`;document.getElementById('ov').classList.add('open');document.body.style.overflow='hidden';}
+function ovClick(e){if(e.target===document.getElementById('ov'))closeM()}
+function closeM(){document.getElementById('ov').classList.remove('open');document.body.style.overflow='';}
+let sy=0;document.getElementById('modal').addEventListener('touchstart',e=>{sy=e.touches[0].clientY});document.getElementById('modal').addEventListener('touchend',e=>{if(e.changedTouches[0].clientY-sy>80)closeM()});
+upd();rsugs();
+</script>
+</body>
+</html>
